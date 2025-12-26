@@ -25,9 +25,9 @@ export class TaskService {
   }): Promise<{
     tasks: Task[];
     pagination: {
+      page: number;
       limit: number;
-      offset: number;
-      count: number;
+      total: number;
     };
   }> {
     const result = await this.taskRepository.getTasks(filters);

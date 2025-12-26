@@ -80,9 +80,9 @@ export class TaskRepository {
   }): Promise<{
     tasks: Task[];
     pagination: {
+      page: number;
       limit: number;
-      offset: number;
-      count: number;
+      total: number;
     };
   }> {
     // Build dynamic WHERE clause
@@ -133,12 +133,14 @@ export class TaskRepository {
 
     const result = await pool.query(query, paginationValues);
 
+    const page = Math.floor(filters.offset / filters.limit) + 1;
+
     return {
       tasks: result.rows.map((row) => this.mapRowToTask(row)),
       pagination: {
+        page: page,
         limit: filters.limit,
-        offset: filters.offset,
-        count: totalCount,
+        total: totalCount,
       },
     };
   }
