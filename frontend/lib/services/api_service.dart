@@ -16,8 +16,10 @@ class ApiService {
       BaseOptions(
         baseUrl: baseUrl,
         contentType: Headers.jsonContentType,
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
+        // Increased timeouts to handle cold starts and slow network responses
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',

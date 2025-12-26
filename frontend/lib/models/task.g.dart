@@ -7,7 +7,7 @@ part of 'task.dart';
 // **************************************************************************
 
 Task _$TaskFromJson(Map<String, dynamic> json) => Task(
-  id: json['id'] as String?,
+  id: Task._idFromJson(json['id']),
   title: json['title'] as String,
   description: json['description'] as String?,
   category: json['category'] as String?,

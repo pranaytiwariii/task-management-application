@@ -1,6 +1,10 @@
 # Task Management Backend
 
+> **📖 For complete project overview, setup instructions, and deployment details, see the [root README](../README.md)**
+
 A professional Node.js/Express backend application for task management with automatic classification, priority detection, and comprehensive REST API.
+
+This document contains backend-specific implementation details, API documentation, and testing information.
 
 ## Table of Contents
 
@@ -342,6 +346,64 @@ Deletes a task and all associated history records.
 
 ---
 
+---
+
+## Postman / Quick API testing
+
+Use Postman (or any HTTP client) to exercise the API. Set a Postman environment variable `base_url` to the API root:
+
+- `base_url` = `https://task-management-backend-p3oj.onrender.com/api` (production)
+- For local testing: `http://localhost:5000/api`
+
+1. Quick GET (list tasks)
+
+- Method: GET
+- URL: `{{base_url}}/tasks?limit=10&offset=0`
+- Headers: `Accept: application/json`
+
+Curl example:
+
+```bash
+curl -s -X GET "https://task-management-backend-p3oj.onrender.com/api/tasks?limit=10&offset=0" \
+  -H "Accept: application/json"
+```
+
+2. Quick POST (create task)
+
+- Method: POST
+- URL: `{{base_url}}/tasks`
+- Headers:
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+- Body (raw JSON):
+
+```json
+{
+  "title": "Postman test task",
+  "description": "Create a task via Postman",
+  "assigned_to": "qa@example.com"
+}
+```
+
+Curl example:
+
+```bash
+curl -s -X POST "https://task-management-backend-p3oj.onrender.com/api/tasks" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Postman test task","description":"Create a task via Postman","assigned_to":"qa@example.com"}'
+```
+
+Postman import tip:
+
+- In Postman choose _Import_ → _Raw text_, paste the `curl` command above, and Postman will create the request for you.
+
+Notes:
+
+- If you run the server locally use `{{base_url}}` environment variable set to `http://localhost:5000/api`.
+- Successful POST returns HTTP 201 with the created task JSON. If you see a `500` error, check the backend logs and database schema (see `docs/init-db.sql`).
+
+---
+
 ## Database Schema
 
 ### Tables
@@ -677,5 +739,3 @@ Given more time, these enhancements would improve the system:
 ISC
 
 ---
-
-**Last Updated:** December 22, 2025

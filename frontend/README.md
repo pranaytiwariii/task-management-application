@@ -1,13 +1,16 @@
 # Task Management App — Flutter Frontend
 
-This repository contains the Flutter mobile frontend for the Task Management Application. It implements a single, comprehensive Task Dashboard screen with create/edit task functionality, robust API integration, and production-quality UX following Material Design 3.
+> **📖 For complete project overview, setup instructions, and deployment details, see the [root README](../README.md)**
 
-> Backend is ready and should be deployed to Render. The frontend consumes its REST APIs with pagination, filtering, sorting, and proper error handling.
+This document contains Flutter-specific implementation details for the Task Management Application mobile interface.
 
 ## Overview
 
-- Single screen app: Task Dashboard with top summary, main task list, and bottom sheet form for create/edit
-- State management: Riverpod (or Provider)
+The Flutter app implements a single, comprehensive Task Dashboard screen with create/edit task functionality, robust API integration, and production-quality UX following Material Design 3.
+
+**Key Technologies:**
+
+- State management: Riverpod
 - Networking: Dio with interceptors (auth, logging, error normalization)
 - UI: Material Design 3, dark mode, skeleton loaders, pull-to-refresh, offline indicator
 - Validation: Server-side via Joi/Zod (Node.js backend) and client-side form validation in Flutter

@@ -4,6 +4,7 @@ part 'task.g.dart';
 
 @JsonSerializable()
 class Task {
+  @JsonKey(fromJson: _idFromJson)
   final String? id;
   final String title;
   final String? description;
@@ -35,6 +36,12 @@ class Task {
   });
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
+
+  // Accept int or String IDs from the API and normalize to String
+  static String? _idFromJson(dynamic value) {
+    if (value == null) return null;
+    return value.toString();
+  }
 
   Map<String, dynamic> toJson() => _$TaskToJson(this);
 
