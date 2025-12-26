@@ -5,9 +5,9 @@ import '../services/api_service.dart';
 final apiServiceProvider = Provider<ApiService>((ref) {
   const baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:5000',
+    defaultValue: 'https://task-management-backend-p3oj.onrender.com',
   );
-  const env = String.fromEnvironment('ENV', defaultValue: 'dev');
+  const env = String.fromEnvironment('ENV', defaultValue: 'production');
 
   return ApiService(baseUrl: baseUrl, env: env);
 });

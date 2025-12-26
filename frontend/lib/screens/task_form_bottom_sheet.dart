@@ -4,6 +4,7 @@ import '../models/task.dart';
 import '../providers/task_provider.dart';
 import '../providers/repository_provider.dart';
 import '../utils/validators.dart';
+import '../utils/classification_helper.dart';
 
 class TaskFormBottomSheet extends ConsumerStatefulWidget {
   const TaskFormBottomSheet({Key? key}) : super(key: key);
@@ -42,6 +43,10 @@ class _TaskFormBottomSheetState extends ConsumerState<TaskFormBottomSheet> {
     );
     _selectedCategory = formTask?.category;
     _selectedPriority = formTask?.priority;
+
+    // Add listeners to refresh auto-detection preview
+    _titleController.addListener(() => setState(() {}));
+    _descriptionController.addListener(() => setState(() {}));
   }
 
   @override
@@ -69,6 +74,20 @@ class _TaskFormBottomSheetState extends ConsumerState<TaskFormBottomSheet> {
         _dueDateController.text = picked.toIso8601String().split('T').first;
       });
     }
+  }
+
+  String _getAutoDetectedCategory() {
+    return ClassificationHelper.classifyCategory(
+      _titleController.text,
+      _descriptionController.text,
+    );
+  }
+
+  String _getAutoDetectedPriority() {
+    return ClassificationHelper.classifyPriority(
+      _titleController.text,
+      _descriptionController.text,
+    );
   }
 
   void _showClassificationPreview() {
@@ -124,8 +143,9 @@ class _TaskFormBottomSheetState extends ConsumerState<TaskFormBottomSheet> {
         id: ref.read(formTaskProvider)?.id,
         title: _titleController.text,
         description: _descriptionController.text,
-        category: _selectedCategory ?? 'general',
-        priority: _selectedPriority ?? 'medium',
+        // Send null if not manually selected - backend will auto-detect
+        category: _selectedCategory,
+        priority: _selectedPriority,
         assigned_to: _assignedToController.text.isEmpty
             ? null
             : _assignedToController.text,
@@ -272,12 +292,62 @@ class _TaskFormBottomSheetState extends ConsumerState<TaskFormBottomSheet> {
             ),
           ),
           const SizedBox(height: 16),
-          // Category selector
+          // Auto-detection preview
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.green.shade50,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.green.shade200),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.auto_awesome,
+                      color: Colors.green.shade700,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Auto-detected:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green.shade900,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Category: ${_selectedCategory ?? _getAutoDetectedCategory()}',
+                  style: TextStyle(fontSize: 13, color: Colors.green.shade900),
+                ),
+                Text(
+                  'Priority: ${_selectedPriority ?? _getAutoDetectedPriority()}',
+                  style: TextStyle(fontSize: 13, color: Colors.green.shade900),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Override below if needed',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.green.shade700,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Category selector (optional override)
           Text(
-            'Category',
+            'Category (Optional - Override auto-detection)',
             style: Theme.of(
               context,
-            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Wrap(
@@ -298,12 +368,12 @@ class _TaskFormBottomSheetState extends ConsumerState<TaskFormBottomSheet> {
                     .toList(),
           ),
           const SizedBox(height: 16),
-          // Priority selector
+          // Priority selector (optional override)
           Text(
-            'Priority',
+            'Priority (Optional - Override auto-detection)',
             style: Theme.of(
               context,
-            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Wrap(
@@ -323,15 +393,6 @@ class _TaskFormBottomSheetState extends ConsumerState<TaskFormBottomSheet> {
                 .toList(),
           ),
           const SizedBox(height: 20),
-          // Show classification button
-          ElevatedButton.icon(
-            onPressed: _showClassificationPreview,
-            icon: const Icon(Icons.preview),
-            label: const Text('Preview Classification'),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(double.infinity, 44),
-            ),
-          ),
           const SizedBox(height: 12),
           // Submit button
           ElevatedButton(

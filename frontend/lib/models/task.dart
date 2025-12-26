@@ -7,8 +7,8 @@ class Task {
   final String? id;
   final String title;
   final String? description;
-  final String category;
-  final String priority;
+  final String? category;
+  final String? priority;
   final String? assigned_to;
   final String status;
   final String? due_date;
@@ -24,8 +24,8 @@ class Task {
     this.id,
     required this.title,
     this.description,
-    this.category = 'general',
-    this.priority = 'medium',
+    this.category,
+    this.priority,
     this.assigned_to,
     this.status = 'pending',
     this.due_date,

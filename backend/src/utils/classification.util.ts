@@ -9,6 +9,7 @@ interface PriorityKeywords {
 const CATEGORY_KEYWORDS: CategoryKeywords = {
   scheduling: [
     "meeting",
+    "meet",
     "schedule",
     "call",
     "appointment",
@@ -16,6 +17,8 @@ const CATEGORY_KEYWORDS: CategoryKeywords = {
     "conference",
     "standup",
     "sync",
+    "calendar",
+    "book",
   ],
   finance: [
     "payment",
@@ -26,6 +29,10 @@ const CATEGORY_KEYWORDS: CategoryKeywords = {
     "expense",
     "financial",
     "accounting",
+    "finalize",
+    "finance",
+    "money",
+    "pay",
   ],
   technical: [
     "bug",

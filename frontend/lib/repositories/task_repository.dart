@@ -67,9 +67,23 @@ class TaskRepository {
   /// Create a new task
   Future<Task> createTask(Task task) async {
     try {
+      // Prepare task data - remove null category and priority
+      // This allows the backend to auto-detect them
+      final taskData = task.toJson();
+
+      // Remove category if null to let backend auto-detect
+      if (taskData['category'] == null) {
+        taskData.remove('category');
+      }
+
+      // Remove priority if null to let backend auto-detect
+      if (taskData['priority'] == null) {
+        taskData.remove('priority');
+      }
+
       final response = await apiService.dio.post(
         AppConstants.tasksEndpoint,
-        data: task.toJson(),
+        data: taskData,
       );
 
       if (response.statusCode == 201) {
@@ -127,7 +141,7 @@ class TaskRepository {
       // Add task rows
       for (final task in tasks) {
         csv.writeln(
-          '"${task.id}","${_escapeCsv(task.title)}","${_escapeCsv(task.description ?? '')}","${task.category}","${task.priority}","${task.status}","${task.assigned_to ?? ''}","${task.due_date ?? ''}","${task.createdAt ?? ''}"',
+          '"${task.id}","${_escapeCsv(task.title)}","${_escapeCsv(task.description ?? '')}","${task.category ?? 'general'}","${task.priority ?? 'low'}","${task.status}","${task.assigned_to ?? ''}","${task.due_date ?? ''}","${task.createdAt ?? ''}"',
         );
       }
 

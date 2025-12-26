@@ -69,25 +69,29 @@ class TaskListItem extends StatelessWidget {
                 spacing: 6,
                 children: [
                   Chip(
-                    label: Text(task.category.capitalize()),
+                    label: Text((task.category ?? 'general').capitalize()),
                     backgroundColor: AppTheme.getCategoryColor(
-                      task.category,
+                      task.category ?? 'general',
                     ).withOpacity(0.2),
                     labelStyle: Theme.of(context).textTheme.labelSmall
                         ?.copyWith(
-                          color: AppTheme.getCategoryColor(task.category),
+                          color: AppTheme.getCategoryColor(
+                            task.category ?? 'general',
+                          ),
                         ),
                     side: BorderSide.none,
                     padding: EdgeInsets.zero,
                   ),
                   Chip(
-                    label: Text(task.priority.capitalize()),
+                    label: Text((task.priority ?? 'low').capitalize()),
                     backgroundColor: AppTheme.getPriorityColor(
-                      task.priority,
+                      task.priority ?? 'low',
                     ).withOpacity(0.2),
                     labelStyle: Theme.of(context).textTheme.labelSmall
                         ?.copyWith(
-                          color: AppTheme.getPriorityColor(task.priority),
+                          color: AppTheme.getPriorityColor(
+                            task.priority ?? 'low',
+                          ),
                         ),
                     side: BorderSide.none,
                     padding: EdgeInsets.zero,
